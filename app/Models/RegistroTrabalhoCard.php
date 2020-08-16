@@ -21,4 +21,9 @@ class RegistroTrabalhoCard extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function card()
+    {
+        return $this->belongsTo(Card::class);
+    }
 }
