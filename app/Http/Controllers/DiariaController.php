@@ -2,63 +2,93 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Diaria;
+use App\Http\Requests\DiariaRequest;
+use App\Repositories\DiariaRepository;
+use App\Services\DiariaService;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 
 class DiariaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    private $diariaRepository;
+    private $diariaService;
+
+    public function __construct(DiariaRepository $diariaRepository, DiariaService $diariaService)
     {
-        //
+        $this->diariaRepository = $diariaRepository;
+        $this->diariaService    = $diariaService;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function index(Request $request)
     {
-        //
+        try {
+            $dataAtual = Carbon::now('America/Sao_Paulo');
+            $mes       = intval($request->get('mes', $dataAtual->format('m')));
+            $ano       = intval($request->get('ano', $dataAtual->format('Y')));
+
+            return $this->diariaRepository->listarDiarias($mes, $ano);
+
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 400);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Diaria  $diaria
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Diaria $diaria)
+    public function store(DiariaRequest $request)
     {
-        //
+        try {
+            return $this->diariaRepository->create($request->all());
+
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 400);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Diaria  $diaria
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Diaria $diaria)
+    public function show(int $diaria)
     {
-        //
+        try {
+            return $this->diariaService->mostrarRegistrosDoDia($diaria);
+
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 400);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Diaria  $diaria
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Diaria $diaria)
+    public function update(DiariaRequest $request, int $diaria)
     {
-        //
+        try {
+            if (!$this->diariaRepository->update($request->all(), $diaria)) {
+                throw new Exception('Diária não encontrada');
+            }
+
+            return response()->noContent();
+
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function destroy(int $diaria)
+    {
+        try {
+            if (!$this->diariaRepository->delete($diaria)) {
+                throw new Exception('Diária não encontrada');
+            }
+
+            return response()->noContent();
+
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 400);
+        }
     }
 }

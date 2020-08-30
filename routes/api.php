@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->middleware('api')->group(function () {
@@ -11,6 +10,9 @@ Route::prefix('auth')->middleware('api')->group(function () {
 
 });
 
-Route::middleware(['auth:api', 'jwt.refresh'])->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('v1')->middleware(['auth:api', 'jwt.refresh'])->group(function () {
+    Route::apiResources([
+        'diarias' => 'DiariaController',
+    ]);
 });
+
