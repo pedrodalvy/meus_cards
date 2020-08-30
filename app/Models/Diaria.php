@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\DiariaObserver;
 use Illuminate\Database\Eloquent\Model;
 
 class Diaria extends Model
@@ -22,6 +23,12 @@ class Diaria extends Model
         'created_at',
         'deleted_at',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        parent::observe(new DiariaObserver());
+    }
 
     public function user()
     {

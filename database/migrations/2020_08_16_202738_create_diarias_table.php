@@ -17,10 +17,10 @@ class CreateDiariasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->date('data_diaria');
-            $table->time('inicio_jornada')->default('08:00:00');
-            $table->time('inicio_almoco')->default('11:30:00');
-            $table->time('fim_almoco')->default('13:00:00');
-            $table->time('fim_jornada')->default('18:20:00');
+            $table->time('inicio_jornada')->nullable();
+            $table->time('inicio_almoco')->nullable();
+            $table->time('fim_almoco')->nullable();
+            $table->time('fim_jornada')->nullable();
             $table->text('observacoes')->nullable();
             $table->timestamps();
 
