@@ -23,7 +23,7 @@ class DiariaController extends Controller
     public function index(Request $request)
     {
         try {
-            $dataAtual = Carbon::now('America/Sao_Paulo');
+            $dataAtual = Carbon::now(env('TIME_ZONE'));
             $mes       = intval($request->get('mes', $dataAtual->format('m')));
             $ano       = intval($request->get('ano', $dataAtual->format('Y')));
 

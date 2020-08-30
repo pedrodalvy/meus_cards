@@ -15,6 +15,20 @@ class CardRepository extends AbstractRepository
         }
     }
 
+    public function listarCards()
+    {
+        parent::setCampos([
+            'id',
+            'card',
+            'titulo',
+            'status',
+            'data_inicio',
+            'data_fim',
+        ]);
+
+        return parent::paginate();
+    }
+
     public function buscarCardsTrabalhadosNoDia($data)
     {
         parent::setCampos([

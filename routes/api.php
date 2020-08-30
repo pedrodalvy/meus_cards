@@ -13,6 +13,7 @@ Route::prefix('auth')->middleware('api')->group(function () {
 Route::prefix('v1')->middleware(['auth:api', 'jwt.refresh'])->group(function () {
     Route::apiResources([
         'diarias' => 'DiariaController',
+        'cards'   => 'CardController',
     ]);
 });
 

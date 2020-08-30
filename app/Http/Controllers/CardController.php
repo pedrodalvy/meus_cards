@@ -2,62 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\card;
+use App\Services\CardService;
 use Illuminate\Http\Request;
 
 class CardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    private $cardService;
+
+    public function __construct(CardService $cardService)
     {
-        //
+        $this->cardService = $cardService;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function index()
+    {
+        try {
+            return $this->cardService->listarCards();
+
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 400);
+        }
+    }
+
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\card  $card
-     * @return \Illuminate\Http\Response
-     */
-    public function show(card $card)
+    public function show(int $card)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\card  $card
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, card $card)
+    public function update(Request $request, int $card)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\card  $card
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(card $card)
+    public function destroy(int $card)
     {
         //
     }
