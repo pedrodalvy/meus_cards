@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Repositories;
-
 
 use App\Models\Card;
 
@@ -11,7 +9,10 @@ class CardRepository extends AbstractRepository
     public function __construct(Card $card)
     {
         parent::__construct($card);
-        parent::setUsuarioLogado('user_id', auth()->user()->id);
+
+        if ($usuario = auth()->user()) {
+            parent::setUsuarioLogado('user_id', $usuario->id);
+        }
     }
 
     public function buscarCardsTrabalhadosNoDia($data)

@@ -9,7 +9,10 @@ class DiariaRepository extends AbstractRepository
     public function __construct(Diaria $diaria)
     {
         parent::__construct($diaria);
-        parent::setUsuarioLogado('user_id', auth()->user()->id);
+
+        if ($usuario = auth()->user()) {
+            parent::setUsuarioLogado('user_id', $usuario->id);
+        }
     }
 
     public function listarDiarias($mes, $ano)
